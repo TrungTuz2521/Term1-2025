@@ -1,0 +1,85 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@{
+	ViewData["Title"] = "Student List";
+	Layout = "~/Views/Shared/MyLayoutHelper.cshtml";
+}
+
+@section Script{
+	<script>
+		var table = document.querySelector("table");
+		table.onclick = function onTableClick(){
+			table.style.backgroundColor = "yellow";
+		}
+	</script>
+}
+
+@using Lab1.Models
+@model IEnumerable<Student>
+<a asp-controller="Student" asp-action="Create" class="btn btn-primary">Create Student</a>
+<a asp-route="studentAdd" class="btn btn-success">Create Studentc2</a>
+<a class=" btn btn-dark" href="/Admin/Student/Add">
+	Create Student
+</a>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th> Mã</th>
+			<th> Họ Tên</th>
+			<th> Ngày Sinh</th>
+			<th> Ngành</th>
+			<th> Giới Tính </th>
+			<th> Hệ ĐT </th>
+			<th> Địa Chỉ  </th>
+			<th> Email </th>	
+			<th> Ảnh Đại Diện </th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var student in Model)
+		{
+		<tr>
+				<td>@student.Id</td>
+				<td>@student.Name</td>
+				<td>@student.DateOfBirth</td>
+					@{
+						string str = "";
+						switch (student.Branch)
+						{
+						case Branch.IT:
+							str = "CNTT";
+							break;
+						case Branch.BE:
+							str = "Kinh Tế";
+							break;
+						case Branch.CE:
+							str = "Công Trình";
+							break;
+						case Branch.EE:
+							str = "Điên - Điện Tử";
+							break;
+						}
+					}
+				<td>@str</td>
+				<td>@(student.Gender == Gender.Male ? "Nam" : "Nữ")</td>
+				<td>@(student.IsRegular ? "Chính Quy" : "Phi Chính Quy")</td>
+				<td>@student.Address</td>
+				<td>@student.Email</td>
+				<td>
+					@if (!string.IsNullOrEmpty(student.Avatar))
+					{
+						<img src="@student.Avatar" width="80" height="80" style="object-fit:cover;border-radius:50%;" />
+					}
+					else
+					{
+						<span>Chưa có ảnh</span>
+					}
+				</td>
+		</tr>
+		}
+	</tbody>
+</table>
